@@ -130,11 +130,6 @@ public class GameBoard {
 
                 if (pacman.isAlive()) {
                     respawnCharacters();
-                    try {
-                        Thread.sleep(1200);
-                    } catch (InterruptedException e) {
-                        System.out.println("Error during respawn");
-                    }
                 }
                 break;
             }
