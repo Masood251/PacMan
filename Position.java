@@ -22,4 +22,8 @@ public class Position {
     public void setY(int y) {
         this.y = y;
     }
+
+    public int calculateDistance(Position other) {
+        return Math.abs(this.x - other.getX()) + Math.abs(this.y - other.getY());
+    }
 }
