@@ -10,7 +10,58 @@ public class Ghost {
         this.p = new Position(x, y);
         this.random = new Random();
     }
+    
+    public void chasePacman(Position pacmanPos, char[][] mazeGrid, Obstacle[] obstacles) {
+        int currentX = this.p.getX();
+        int currentY = this.p.getY();
 
+        int bestDir = -1;
+        int bestDistance = Integer.MAX_VALUE;
+
+        int[][] dirs = {{0, -1, 0}, {0, 1, 1}, {1, 0, 2}, {-1, 0, 3}};
+
+        for (int[] dir : dirs) {
+            int newX = currentX + dir[0];
+            int newY = currentY + dir[1];
+            int dirCode = dir[2];
+
+            if (isValidMove(newX, newY, mazeGrid, obstacles)) {
+                Position newPos = new Position(newX, newY);
+                int distance = newPos.calculateDistance(pacmanPos);
+
+                if (distance < bestDistance) {
+                    bestDistance = distance;
+                    bestDir = dirCode;
+                } else if (distance == bestDistance && bestDir != -1) {
+                    bestDir = break_tie(dirCode, bestDir);
+                }
+            }
+        }
+
+        if (bestDir == 0) {
+            this.p.setY(currentY - 1);
+        } else if (bestDir == 1) {
+            this.p.setY(currentY + 1);
+        } else if (bestDir == 2) {
+            this.p.setX(currentX + 1);
+        } else if (bestDir == 3) {
+            this.p.setX(currentX - 1);
+        }
+    }
+
+    private int break_tie(int newDir, int currentDir) {
+        if (this.name.equals("Blinky")) {
+            int[] priority = {0, 3, 1, 2};
+            return getHigherPriority(newDir, currentDir, priority);
+        } else if (this.name.equals("Pinky")) {
+            int[] priority = {0, 2, 1, 3};
+            return getHigherPriority(newDir, currentDir, priority);
+        } else if (this.name.equals("Inky")) {
+            int[] priority = {1, 3, 0, 2};
+            return getHigherPriority(newDir, currentDir, priority);
+        }
+        return currentDir;
+    }
 
     private int getHigherPriority(int dir1, int dir2, int[] priority) {
         int pos1 = -1, pos2 = -1;
