@@ -11,31 +11,14 @@ public class Ghost {
         this.random = new Random();
     }
 
-    public void moveRandom(char[][] mazeGrid, Obstacle[] obstacles) {
-        int currentX = this.p.getX();
-        int currentY = this.p.getY();
 
-        for (int attempt = 0; attempt < 20; attempt++) {
-            int direction = random.nextInt(4);
-            int newX = currentX;
-            int newY = currentY;
-
-            if (direction == 0) {
-                newY = currentY - 1;
-            } else if (direction == 1) {
-                newY = currentY + 1;
-            } else if (direction == 2) {
-                newX = currentX + 1;
-            } else if (direction == 3) {
-                newX = currentX - 1;
-            }
-
-            if (isValidMove(newX, newY, mazeGrid, obstacles)) {
-                this.p.setX(newX);
-                this.p.setY(newY);
-                return;
-            }
+    private int getHigherPriority(int dir1, int dir2, int[] priority) {
+        int pos1 = -1, pos2 = -1;
+        for (int i = 0; i < priority.length; i++) {
+            if (priority[i] == dir1) pos1 = i;
+            if (priority[i] == dir2) pos2 = i;
         }
+        return (pos1 < pos2) ? dir1 : dir2;
     }
 
     private boolean isValidMove(int x, int y, char[][] mazeGrid, Obstacle[] obstacles) {
